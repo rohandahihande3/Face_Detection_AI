@@ -147,7 +147,8 @@ export default function AIChatbot() {
         } catch (error) {
             const errorMessage = {
                 role: 'assistant',
-                content: `Error: ${error.message}. Make sure your Python backend is running at https://facedetectionai-production.up.railway.app`,
+                content: `Error: ${error.message}. Make sure your Python backend is running at https://facedetectionai-production.up.railway.app
+`,
                 timestamp: new Date().toISOString(),
                 isError: true
             };

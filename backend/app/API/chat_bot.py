@@ -13,12 +13,18 @@ from werkzeug.utils import secure_filename
 
 load_dotenv()
 
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+# client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 UPLOAD_FOLDER = "UPLOAD"
 if not os.path.exists(UPLOAD_FOLDER):
     os.mkdir(UPLOAD_FOLDER)
 
+
+def get_groq_client():
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        raise RuntimeError("GROQ_API_KEY environment variable not set")
+    return Groq(api_key=api_key)
 
 def chunk_text(text: str,question:str):
     print(f"==>> text: {text}")
@@ -41,7 +47,11 @@ def chunk_text(text: str,question:str):
     return answer_with_groq(db,question)
  
 def answer_with_groq(db,question, k=4):
-
+    try:
+        client = get_groq_client()
+    except RuntimeError as e:
+        # Propagate a clear error that can be returned to the user
+        raise RuntimeError("Groq client unavailable: " + str(e))
     # 1. Retrieve most relevant chunks
     docs = db.similarity_search(question, k=k)
 
@@ -98,43 +108,52 @@ def answer_with_groq(db,question, k=4):
 chat_bp = Blueprint("chat_bp",__name__)
 
 def rag_pipeline(question):
+    try:
+        client = get_groq_client()
+    except RuntimeError as e:
+        # Propagate a clear error that can be returned to the user
+        raise RuntimeError("Groq client unavailable: " + str(e))
 #   docs = db.similarity_search(question, k=k)
 
 #   context = "\n\n".join([d.page_content for d in docs])
 
-  prompt = f"""
-    You are a helpful assistant trained to provide accurate and relevant answers based on the context of the user's query.
-    When a user asks a question, analyze the context carefully and respond in a way that directly addresses their need.
-    Your responses should be clear, informative, and tailored to the specific nature of the user's question,
-    whether it's general knowledge, technical assistance, academic inquiry, or something else.
-    
+    prompt = f"""
+        You are a helpful assistant trained to provide accurate and relevant answers based on the context of the user's query.
+        When a user asks a question, analyze the context carefully and respond in a way that directly addresses their need.
+        Your responses should be clear, informative, and tailored to the specific nature of the user's question,
+        whether it's general knowledge, technical assistance, academic inquiry, or something else.
+        
 
-    Question:
-    {question}
+        Question:
+        {question}
 
-    Answer:
-    """.strip()
+        Answer:
+        """.strip()
 
-  response = client.chat.completions.create(
-        model="openai/gpt-oss-120b",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.1,
-    )
+    response = client.chat.completions.create(
+            model="openai/gpt-oss-120b",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.1,
+        )
 
-  final_answer = response.choices[0].message.content
-  return final_answer
+    final_answer = response.choices[0].message.content
+    return final_answer
 
 
 
-@chat_bp.route('/chat',methods=["POST"])
+@chat_bp.route('/chat', methods=["POST"])
 def start_chat():
     try:
         data = request.get_json()
         message = data.get("message")
-        response = rag_pipeline(message)
+        # attempt to run pipeline
+        try:
+            response = rag_pipeline(message)
+        except RuntimeError as e:
+            return jsonify({"error": str(e)}), 500
         return jsonify({"response": response})
     except Exception as e:
-       return jsonify ({"msg":e})
+        return jsonify({"msg": str(e)}), 500
     
 
 

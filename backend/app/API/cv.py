@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, send_file,Blueprint
+from flask import Flask, request, send_file,Blueprint,jsonify
 from flask_cors import CORS
 import cv2 as cv
 import numpy as np
@@ -18,6 +18,15 @@ CORS(open_cv_api)
 BASE = os.path.dirname(__file__)  # /backend/app/API
 XML_PATH = os.path.abspath(os.path.join(BASE, "..", "xml_files"))
 
+def load_cascade(filename_candidates):
+    """Try multiple candidate filenames and return a loaded CascadeClassifier or None."""
+    for fname in filename_candidates:
+        path = os.path.join(XML_PATH, fname)
+        if os.path.exists(path):
+            cascade = cv.CascadeClassifier(path)
+            if not cascade.empty():
+                return cascade
+    return None
 
 @open_cv_api.route('/detect', methods=['POST'])
 def detect():
@@ -65,44 +74,57 @@ def detect():
 
 @open_cv_api.route('/detect-live', methods=['POST'])
 def detect_live():
-    if 'image' not in request.files:
-        return {"error": "No image received"}, 400
+    try:
+        if 'image' not in request.files:
+            return jsonify({"error": "No image received"}), 400
 
-    file = request.files['image']
-    print(f"==>> file: {file}")
-    img = cv.imdecode(np.frombuffer(file.read(), np.uint8), cv.IMREAD_COLOR)
+        file = request.files['image']
+        data = file.read()
+        if not data:
+            return jsonify({"error": "Empty file uploaded"}), 400
 
-    # Load cascades
-    face_cascade = cv.CascadeClassifier(os.path.join(XML_PATH, "frontal_facelt.xml"))
-    eye_cascade = cv.CascadeClassifier(os.path.join(XML_PATH, "eye.xml"))
-    nose_cascade = cv.CascadeClassifier(os.path.join(XML_PATH, "nose.xml"))
-    mouth_cascade = cv.CascadeClassifier(os.path.join(XML_PATH, "mouth.xml"))
+        img = cv.imdecode(np.frombuffer(data, np.uint8), cv.IMREAD_COLOR)
+        if img is None:
+            return jsonify({"error": "Unable to decode image"}), 400
 
-    gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+        # Try to load cascades (use typical filenames; adjust to what you included)
+        face_cascade = load_cascade(["haarcascade_frontalface_default.xml", "frontal_facelt.xml"])
+        eye_cascade = load_cascade(["haarcascade_eye.xml", "eye.xml"])
+        nose_cascade = load_cascade(["nose.xml"])
+        mouth_cascade = load_cascade(["mouth.xml"])
 
-    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+        if face_cascade is None:
+            return jsonify({"error": f"Face cascade not found. Looked in {XML_PATH}"}), 500
 
-    for (x, y, w, h) in faces:
-        cv.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
+        gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
-        roi_gray = gray[y:y+h, x:x+w]
-        roi_color = img[y:y+h, x:x+w]
+        for (x, y, w, h) in faces:
+            cv.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
+            roi_gray = gray[y:y+h, x:x+w]
+            roi_color = img[y:y+h, x:x+w]
 
-        eyes = eye_cascade.detectMultiScale(roi_gray, 1.1, 3)
-        for (ex, ey, ew, eh) in eyes:
-            cv.rectangle(roi_color, (ex, ey), (ex+ew, ey+eh), (0, 255, 0), 2)
+            if eye_cascade is not None:
+                eyes = eye_cascade.detectMultiScale(roi_gray, 1.1, 3)
+                for (ex, ey, ew, eh) in eyes:
+                    cv.rectangle(roi_color, (ex, ey), (ex+ew, ey+eh), (0, 255, 0), 2)
 
-        nose = nose_cascade.detectMultiScale(roi_gray, 1.1, 3)
-        for (nx, ny, nw, nh) in nose:
-            cv.rectangle(roi_color, (nx, ny), (nx+nw, ny+nh), (0, 0, 255), 2)
+            if nose_cascade is not None:
+                nose = nose_cascade.detectMultiScale(roi_gray, 1.1, 3)
+                for (nx, ny, nw, nh) in nose:
+                    cv.rectangle(roi_color, (nx, ny), (nx+nw, ny+nh), (0, 0, 255), 2)
 
-        mouth = mouth_cascade.detectMultiScale(roi_gray, 1.1, 3)
-        for (mx, my, mw, mh) in mouth:
-            cv.rectangle(roi_color, (mx, my), (mx+mw, my+mh), (255, 255, 0), 2)
+            if mouth_cascade is not None:
+                mouth = mouth_cascade.detectMultiScale(roi_gray, 1.1, 3)
+                for (mx, my, mw, mh) in mouth:
+                    cv.rectangle(roi_color, (mx, my), (mx+mw, my+mh), (255, 255, 0), 2)
 
-    # Return image
-    _, buffer = cv.imencode('.jpg', img)
-    return send_file(BytesIO(buffer), mimetype='image/jpeg')
+        # Return image
+        _, buffer = cv.imencode('.jpg', img)
+        return send_file(BytesIO(buffer), mimetype='image/jpeg')
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 
