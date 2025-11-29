@@ -31,7 +31,7 @@ export default function AIChatbot() {
             });
 
             // Upload documents to backend
-            const response = await fetch('http://localhost:5000/upload', {
+            const response = await fetch('http://10.210.228.202:5000/upload', {
                 method: 'POST',
                 body: formData,
             });
@@ -111,8 +111,8 @@ export default function AIChatbot() {
         try {
             // Determine which endpoint to use based on whether documents are uploaded
             const endpoint = uploadedDocuments.length > 0
-                ? 'http://127.0.0.1:5000/ask'
-                : 'http://127.0.0.1:5000/chat';
+                ? 'http://10.210.228.202:5000/ask'
+                : 'http://10.210.228.202:5000/chat';
 
             const requestBody = uploadedDocuments.length > 0
                 ? {
