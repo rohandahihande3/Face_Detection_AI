@@ -4,7 +4,14 @@ from app.API.cv import open_cv_api
 from app.API.chat_bot import chat_bp
 def create_app():
     app = Flask(__name__)
-    CORS(app)
+    CORS(app, resources={r"/*": {
+        "origins": [
+            "https://facedetectionai-projects.vercel.app",     # your frontend domain
+            "http://localhost:3000"                            # development
+        ],
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"],
+    }})
     app.register_blueprint(open_cv_api)
     app.register_blueprint(chat_bp)    
     return app
