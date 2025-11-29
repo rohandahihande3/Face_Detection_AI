@@ -31,7 +31,7 @@ export default function AIChatbot() {
             });
 
             // Upload documents to backend
-            const response = await fetch('http://10.210.228.202:5000/upload', {
+            const response = await fetch('https://facedetectionai-production.up.railway.app/upload', {
                 method: 'POST',
                 body: formData,
             });
@@ -111,8 +111,8 @@ export default function AIChatbot() {
         try {
             // Determine which endpoint to use based on whether documents are uploaded
             const endpoint = uploadedDocuments.length > 0
-                ? 'http://10.210.228.202:5000/ask'
-                : 'http://10.210.228.202:5000/chat';
+                ? 'https://facedetectionai-production.up.railway.app/ask'
+                : 'https://facedetectionai-production.up.railway.app/chat';
 
             const requestBody = uploadedDocuments.length > 0
                 ? {
@@ -147,7 +147,7 @@ export default function AIChatbot() {
         } catch (error) {
             const errorMessage = {
                 role: 'assistant',
-                content: `Error: ${error.message}. Make sure your Python backend is running at http://localhost:8000`,
+                content: `Error: ${error.message}. Make sure your Python backend is running at https://facedetectionai-production.up.railway.app`,
                 timestamp: new Date().toISOString(),
                 isError: true
             };

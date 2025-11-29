@@ -143,7 +143,7 @@ export default function Home() {
             formData.append("image", file);
 
             try {
-                const response = await fetch("http://10.210.228.202:5000/detect", {
+                const response = await fetch("https://facedetectionai-production.up.railway.app/detect", {
                     method: "POST",
                     body: formData,
                 });
@@ -183,7 +183,7 @@ export default function Home() {
         formData.append("image", file);
 
         try {
-            const response = await fetch("http://10.210.228.202:5000/detect", {
+            const response = await fetch("https://facedetectionai-production.up.railway.app/detect", {
                 method: "POST",
                 body: formData,
             });
@@ -209,7 +209,7 @@ export default function Home() {
         formData.append("image", selectedImage);
 
         try {
-            const response = await fetch("http://10.210.228.202:5000/detect", {
+            const response = await fetch("https://facedetectionai-production.up.railway.app/detect", {
                 method: "POST",
                 body: formData,
             });
@@ -296,7 +296,7 @@ export default function Home() {
                 formData.append("image", blob, "frame.jpg");
     
                 try {
-                    const res = await fetch("http://10.210.228.202:5000/detect-live", {
+                    const res = await fetch("https://facedetectionai-production.up.railway.app/detect-live", {
                         method: "POST",
                         body: formData,
                     });
