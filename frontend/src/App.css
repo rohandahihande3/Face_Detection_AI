@@ -1,0 +1,179 @@
+/* Global Layout */
+.app {
+  min-height: 100vh;
+  padding: 30px;
+  background: linear-gradient(135deg, #e0f2fe, #e0e7ff);
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #312e81;
+  font-weight: bold;
+}
+
+.subtitle {
+  text-align: center;
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+/* Mode Buttons */
+.mode-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.mode-btn {
+  padding: 12px 22px;
+  border-radius: 8px;
+  background: white;
+  color: #374151;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mode-btn.active {
+  background: #4f46e5;
+  color: white;
+}
+
+.mode-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Error Box */
+.error-box {
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  padding: 12px;
+  text-align: center;
+  border-radius: 8px;
+}
+
+/* Cards */
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  margin-bottom: 30px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+}
+
+/* Upload Area */
+.upload-area {
+  border: 2px dashed #a5b4fc;
+  padding: 50px 20px;
+  text-align: center;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.upload-area:hover {
+  background: #eef2ff;
+}
+
+/* Camera Layout */
+.camera-layout {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 25px;
+}
+
+.camera-card {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  width: 500px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.camera-video {
+  width: 100%;
+  height: auto;
+  background: black;
+  border-radius: 12px;
+}
+
+/* Buttons */
+.btn {
+  padding: 12px 22px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background: #4f46e5;
+  color: white;
+}
+
+.btn-secondary {
+  background: #6b7280;
+  color: white;
+}
+
+.big-btn {
+  margin-top: 20px;
+  width: 200px;
+}
+
+/* Action buttons under camera */
+.action-buttons {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Processed Preview */
+.processed-card {
+  text-align: center;
+}
+
+.processed-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #4f46e5;
+  margin-bottom: 12px;
+}
+
+.processed-img {
+  width: 450px;
+  border-radius: 12px;
+  border: 2px solid #e5e7eb;
+}
+
+/* Image Grid for Upload Mode */
+.image-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-top: 20px;
+}
+
+.image-grid img {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+/* Hidden Canvas */
+.hidden {
+  display: none;
+}
