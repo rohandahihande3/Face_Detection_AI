@@ -13,8 +13,7 @@ from werkzeug.utils import secure_filename
 
 load_dotenv()
 
-client = Groq(api_key=os.getenv("API_KEY"))
-
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 UPLOAD_FOLDER = "UPLOAD"
 if not os.path.exists(UPLOAD_FOLDER):
