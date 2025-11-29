@@ -1,7 +1,6 @@
 
-echo "__pycache__/" >> .gitignore
-echo "*.pyc" >> .gitignore
-echo "*.log" >> .gitignore
-echo "backend/.env" >> .gitignore
-echo "backend/Non_realted/" >> .gitignore
-
+__pycache__
+*.pyc
+*.log
+backend/.env
+backend/Non_realted/
