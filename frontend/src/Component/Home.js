@@ -307,7 +307,7 @@ export default function Home() {
                     console.log("Live detection error:", err.message);
                 }
             }, "image/jpeg");
-        },100); // safer interval
+        },400); // safer interval
     };
     
 

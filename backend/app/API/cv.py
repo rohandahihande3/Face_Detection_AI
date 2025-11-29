@@ -18,15 +18,15 @@ CORS(open_cv_api)
 BASE = os.path.dirname(__file__)  # /backend/app/API
 XML_PATH = os.path.abspath(os.path.join(BASE, "..", "xml_files"))
 
-def load_cascade(filename_candidates):
-    """Try multiple candidate filenames and return a loaded CascadeClassifier or None."""
-    for fname in filename_candidates:
-        path = os.path.join(XML_PATH, fname)
-        if os.path.exists(path):
-            cascade = cv.CascadeClassifier(path)
-            if not cascade.empty():
-                return cascade
-    return None
+# def load_cascade(filename_candidates):
+#     """Try multiple candidate filenames and return a loaded CascadeClassifier or None."""
+#     for fname in filename_candidates:
+#         path = os.path.join(XML_PATH, fname)
+#         if os.path.exists(path):
+#             cascade = cv.CascadeClassifier(path)
+#             if not cascade.empty():
+#                 return cascade
+#     return None
 
 @open_cv_api.route('/detect', methods=['POST'])
 def detect():
@@ -88,10 +88,10 @@ def detect_live():
             return jsonify({"error": "Unable to decode image"}), 400
 
         # Try to load cascades (use typical filenames; adjust to what you included)
-        face_cascade = load_cascade(["haarcascade_frontalface_default.xml", "frontal_facelt.xml"])
-        eye_cascade = load_cascade(["haarcascade_eye.xml", "eye.xml"])
-        nose_cascade = load_cascade(["nose.xml"])
-        mouth_cascade = load_cascade(["mouth.xml"])
+        face_cascade = cv.CascadeClassifier(os.path.join(XML_PATH, "frontal_facelt.xml"))
+        eye_cascade = cv.CascadeClassifier(os.path.join(XML_PATH, "eye.xml"))
+        nose_cascade = cv.CascadeClassifier(os.path.join(XML_PATH, "nose.xml"))
+        mouth_cascade = cv.CascadeClassifier(os.path.join(XML_PATH, "mouth.xml"))
 
         if face_cascade is None:
             return jsonify({"error": f"Face cascade not found. Looked in {XML_PATH}"}), 500
