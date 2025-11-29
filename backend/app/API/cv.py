@@ -34,7 +34,7 @@ def detect():
     img = cv.imdecode(np.frombuffer(file.read(), np.uint8), cv.IMREAD_COLOR)
     
     # Load cascade XML files correctly
-    face_cascade = cv.CascadeClassifier(os.path.join(XML_PATH, "frontal_facelt.xml"))
+    face_cascade = cv.CascadeClassifier(os.path.join(XML_PATH, "frontal_face.xml"))
     if face_cascade.empty():
         return {"error": "Failed to load cascade from: " + XML_PATH}, 500
     eye_cascade = cv.CascadeClassifier(os.path.join(XML_PATH, "eye.xml"))
@@ -88,7 +88,7 @@ def detect_live():
             return jsonify({"error": "Unable to decode image"}), 400
 
         # Try to load cascades (use typical filenames; adjust to what you included)
-        face_cascade = cv.CascadeClassifier(os.path.join(XML_PATH, "frontal_facelt.xml"))
+        face_cascade = cv.CascadeClassifier(os.path.join(XML_PATH, "frontal_face.xml"))
         eye_cascade = cv.CascadeClassifier(os.path.join(XML_PATH, "eye.xml"))
         nose_cascade = cv.CascadeClassifier(os.path.join(XML_PATH, "nose.xml"))
         mouth_cascade = cv.CascadeClassifier(os.path.join(XML_PATH, "mouth.xml"))
