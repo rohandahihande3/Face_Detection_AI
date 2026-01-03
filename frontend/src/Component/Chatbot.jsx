@@ -31,7 +31,7 @@ export default function AIChatbot() {
             });
 
             // Upload documents to backend
-            const response = await fetch('https://facedetectionai-production.up.railway.app/upload', {
+            const response = await fetch('https://face-detection-ai-1.onrender.com/upload', {
                 method: 'POST',
                 body: formData,
             });
@@ -78,7 +78,7 @@ export default function AIChatbot() {
     const removeDocument = async (docId) => {
         try {
             // Optionally call backend to delete the document
-            await fetch(`http://localhost:8000/api/documents/${docId}`, {
+            await fetch(`https://face-detection-ai-1.onrender.com/api/documents/${docId}`, {
                 method: 'DELETE',
             });
 
@@ -111,8 +111,8 @@ export default function AIChatbot() {
         try {
             // Determine which endpoint to use based on whether documents are uploaded
             const endpoint = uploadedDocuments.length > 0
-                ? 'https://facedetectionai-production.up.railway.app/ask'
-                : 'https://facedetectionai-production.up.railway.app/chat';
+                ? 'https://face-detection-ai-1.onrender.com/ask'
+                : 'https://face-detection-ai-1.onrender.com/chat';
 
             const requestBody = uploadedDocuments.length > 0
                 ? {
@@ -147,7 +147,7 @@ export default function AIChatbot() {
         } catch (error) {
             const errorMessage = {
                 role: 'assistant',
-                content: `Error: ${error.message}. Make sure your Python backend is running at https://facedetectionai-production.up.railway.app
+                content: `Error: ${error.message}. Make sure your Python backend is running at https://face-detection-ai-1.onrender.com
 `,
                 timestamp: new Date().toISOString(),
                 isError: true
