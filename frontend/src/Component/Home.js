@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Camera, Upload, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL
+// const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL
 export default function Home() {
     const [mode, setMode] = useState("upload");
     const navigate = useNavigate();
@@ -126,7 +126,7 @@ export default function Home() {
             formData.append("image", file);
 
             try {
-                const response = await fetch(`${REACT_APP_BACKEND_URL}/detect`, {
+                const response = await fetch(`https://face-detection-ai-1.onrender.com/detect`, {
                     method: "POST",
                     body: formData,
                 });
@@ -166,7 +166,7 @@ export default function Home() {
         formData.append("image", file);
 
         try {
-            const response = await fetch(`${REACT_APP_BACKEND_URL}/detect`, {
+            const response = await fetch(`https://face-detection-ai-1.onrender.com/detect`, {
                 method: "POST",
                 body: formData,
             });
@@ -192,7 +192,7 @@ export default function Home() {
         formData.append("image", selectedImage);
 
         try {
-            const response = await fetch(`${REACT_APP_BACKEND_URL}/detect`, {
+            const response = await fetch(`https://face-detection-ai-1.onrender.com/detect`, {
                 method: "POST",
                 body: formData,
             });
@@ -242,7 +242,7 @@ export default function Home() {
                 formData.append("image", blob, "frame.jpg");
     
                 try {
-                    const res = await fetch(`${REACT_APP_BACKEND_URL}/detect-live`, {
+                    const res = await fetch(`https://face-detection-ai-1.onrender.com/detect-live`, {
                         method: "POST",
                         body: formData,
                     });
