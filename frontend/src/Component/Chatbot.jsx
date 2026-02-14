@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Upload, Send, File, X, Loader2, MessageSquare, FileText, Trash2 } from 'lucide-react';
+import { Upload, Send, File, Loader2, MessageSquare, FileText, Trash2 } from 'lucide-react';
 
 export default function AIChatbot() {
     const [messages, setMessages] = useState([]);
