@@ -13,7 +13,7 @@ RUN npm ci
 COPY . .
 
 # Set environment variables for build
-ENV REACT_APP_BACKEND_URL="https://face-detection-ai-1.onrender.com"
+# ENV REACT_APP_BACKEND_URL="https://face-detection-ai-1.onrender.com"
 
 
 
