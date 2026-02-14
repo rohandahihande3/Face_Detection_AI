@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Camera, Upload, X, RefreshCw } from "lucide-react";
+import { Camera, Upload, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 export default function Home() {
     const [mode, setMode] = useState("upload");
