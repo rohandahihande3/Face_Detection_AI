@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Camera, Upload, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL
@@ -54,22 +54,41 @@ export default function Home() {
     // ---------------------------
     // STOP CAMERA + STOP LIVE LOOP
     // ---------------------------
-    const stopCamera = () => {
-        if (cameraStream) {
-            cameraStream.getTracks().forEach((t) => t.stop());
-        }
-        setCameraStream(null);
-        setCameraReady(false);
+    // const stopCamera = () => {
+    //     if (cameraStream) {
+    //         cameraStream.getTracks().forEach((t) => t.stop());
+    //     }
+    //     setCameraStream(null);
+    //     setCameraReady(false);
 
-        if (liveIntervalRef.current) {
-            clearInterval(liveIntervalRef.current);
-            liveIntervalRef.current = null;
-        }
+    //     if (liveIntervalRef.current) {
+    //         clearInterval(liveIntervalRef.current);
+    //         liveIntervalRef.current = null;
+    //     }
 
-        setLiveProcessed(null);
+    //     setLiveProcessed(null);
 
-        if (videoRef.current) videoRef.current.srcObject = null;
-    };
+    //     if (videoRef.current) videoRef.current.srcObject = null;
+    // };
+    const stopCamera = useCallback(() => {
+    if (cameraStream) {
+        cameraStream.getTracks().forEach((t) => t.stop());
+    }
+
+    setCameraStream(null);
+    setCameraReady(false);
+
+    if (liveIntervalRef.current) {
+        clearInterval(liveIntervalRef.current);
+        liveIntervalRef.current = null;
+    }
+
+    setLiveProcessed(null);
+
+    if (videoRef.current) {
+        videoRef.current.srcObject = null;
+    }
+}, [cameraStream]);
 
     const captureAndProcess = () => {
         const video = videoRef.current;
@@ -260,8 +279,8 @@ export default function Home() {
     };
 
     useEffect(() => {
-        return () => stopCamera();
-    }, []);
+    return () => stopCamera();
+}, [stopCamera]);
 
     return (
         <div className="app">
