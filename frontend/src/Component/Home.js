@@ -143,7 +143,7 @@ export default function Home() {
             formData.append("image", file);
 
             try {
-                const response = await fetch("https://face-detection-ai-1.onrender.com//detect", {
+                const response = await fetch("https://face-detection-ai-1.onrender.com/detect", {
                     method: "POST",
                     body: formData,
                 });

@@ -148,6 +148,7 @@ export default function AIChatbot() {
             const errorMessage = {
                 role: 'assistant',
                 content: `Error: ${error.message}. Make sure your Python backend is running at https://face-detection-ai-1.onrender.com
+
 `,
                 timestamp: new Date().toISOString(),
                 isError: true
