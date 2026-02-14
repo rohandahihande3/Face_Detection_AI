@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Upload, Send, File, Loader2, MessageSquare, FileText, Trash2 } from 'lucide-react';
-
+const BACKEND_URL = process.env.BACKEND_URL
 export default function AIChatbot() {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
@@ -31,7 +31,7 @@ export default function AIChatbot() {
             });
 
             // Upload documents to backend
-            const response = await fetch('https://face-detection-ai-1.onrender.com/upload', {
+            const response = await fetch(`${BACKEND_URL}/upload`, {
                 method: 'POST',
                 body: formData,
             });
@@ -111,8 +111,8 @@ export default function AIChatbot() {
         try {
             // Determine which endpoint to use based on whether documents are uploaded
             const endpoint = uploadedDocuments.length > 0
-                ? 'https://face-detection-ai-1.onrender.com/ask'
-                : 'https://face-detection-ai-1.onrender.com/chat';
+                ? `${BACKEND_URL}/ask`
+                : `${BACKEND_URL}/chat`;
 
             const requestBody = uploadedDocuments.length > 0
                 ? {
@@ -147,7 +147,7 @@ export default function AIChatbot() {
         } catch (error) {
             const errorMessage = {
                 role: 'assistant',
-                content: `Error: ${error.message}. Make sure your Python backend is running at https://face-detection-ai-1.onrender.com
+                content: `Error: ${error.message}. Make sure your Python backend is running at BACKEND_URL
 
 `,
                 timestamp: new Date().toISOString(),

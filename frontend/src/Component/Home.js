@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Camera, Upload, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+const BACKEND_URL = process.env.BACKEND_URL
 export default function Home() {
     const [mode, setMode] = useState("upload");
     const navigate = useNavigate();
@@ -70,43 +71,6 @@ export default function Home() {
         if (videoRef.current) videoRef.current.srcObject = null;
     };
 
-    // ---------------------------
-    // CAPTURE PHOTO
-    // ---------------------------
-    // const captureImage = () => {
-    //   const video = videoRef.current;
-    //   const canvas = canvasRef.current;
-
-    //   if (!canvas || !video) {
-    //     console.log("❌ No video or canvas!");
-    //     return;
-    //   }
-
-    //   canvas.width = video.videoWidth || 640;
-    //   canvas.height = video.videoHeight || 480;
-
-    //   const ctx = canvas.getContext("2d");
-    //   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    //   canvas.toBlob((blob) => {
-    //     if (!blob) {
-    //       setError("Camera frame not ready. Try again.");
-    //       return;
-    //     }
-
-    //     const file = new File([blob], "capture.jpg", { type: "image/jpeg" });
-    //     console.log("📸 Captured:", file);
-
-    //     setSelectedImage(file);
-
-    //     // 🔥 FORCE APP TO ENTER UPLOAD MODE
-    //     setMode("upload");
-
-    //     stopCamera();
-    //   }, "image/jpeg");
-    // };
-
-
     const captureAndProcess = () => {
         const video = videoRef.current;
         const canvas = canvasRef.current;
@@ -143,7 +107,7 @@ export default function Home() {
             formData.append("image", file);
 
             try {
-                const response = await fetch("https://face-detection-ai-1.onrender.com/detect", {
+                const response = await fetch(`${BACKEND_URL}/detect`, {
                     method: "POST",
                     body: formData,
                 });
@@ -183,7 +147,7 @@ export default function Home() {
         formData.append("image", file);
 
         try {
-            const response = await fetch("https://face-detection-ai-1.onrender.com/detect", {
+            const response = await fetch(`${BACKEND_URL}/detect`, {
                 method: "POST",
                 body: formData,
             });
@@ -209,7 +173,7 @@ export default function Home() {
         formData.append("image", selectedImage);
 
         try {
-            const response = await fetch("https://face-detection-ai-1.onrender.com/detect", {
+            const response = await fetch(`${BACKEND_URL}/detect`, {
                 method: "POST",
                 body: formData,
             });
@@ -222,43 +186,6 @@ export default function Home() {
 
         setLoading(false);
     };
-
-    // ---------------------------
-    // LIVE DETECTION
-    // ---------------------------
-    // const startLiveDetection = () => {
-    //     if (!cameraReady) return;
-
-    //     liveIntervalRef.current = setInterval(async () => {
-    //         const video = videoRef.current;
-    //         const canvas = canvasRef.current;
-
-    //         if (!video || !canvas) return;
-
-    //         canvas.width = video.videoWidth;
-    //         canvas.height = video.videoHeight;
-
-    //         const ctx = canvas.getContext("2d");
-    //         ctx.drawImage(video, 0, 0);
-
-    //         canvas.toBlob(async (blob) => {
-    //             const formData = new FormData();
-    //             formData.append("image", blob, "frame.jpg");
-
-    //             try {
-    //                 const res = await fetch("http://localhost:5000/detect-live", {
-    //                     method: "POST",
-    //                     body: formData,
-    //                 });
-
-    //                 const processedBlob = await res.blob();
-    //                 setLiveProcessed(URL.createObjectURL(processedBlob));
-    //             } catch (err) {
-    //                 console.log("Live detection error:", err.message);
-    //             }
-    //         }, "image/jpeg");
-    //     }, 100);
-    // };
 
     const startLiveDetection = () => {
         if (!cameraReady || !videoRef.current || !canvasRef.current) {
@@ -296,7 +223,7 @@ export default function Home() {
                 formData.append("image", blob, "frame.jpg");
     
                 try {
-                    const res = await fetch("https://face-detection-ai-1.onrender.com/detect-live", {
+                    const res = await fetch(`${BACKEND_URL}/detect-live`, {
                         method: "POST",
                         body: formData,
                     });

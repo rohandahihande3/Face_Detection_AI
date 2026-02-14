@@ -12,6 +12,9 @@ RUN npm ci
 # Copy source
 COPY . .
 
+# Set environment variables for build
+ENV BACKEND_URL="https://face-detection-ai-1.onrender.com"
+
 # Build React app (CRA -> build/)
 RUN npm run build
 
