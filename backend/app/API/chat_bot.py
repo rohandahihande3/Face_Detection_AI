@@ -2,12 +2,11 @@ from flask import Blueprint ,request,jsonify
 # from langchain_community.document_loaders import PDFPlumberLoader
 # from langchain_text_splitters import RecursiveCharacterTextSplitter
 # from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_community.vectorstores import Chroma
+# from langchain_community.vectorstores import Chroma
 # from langchain_openai import OpenAI
 import os,tiktoken,PyPDF2
 from groq import Groq
 from dotenv import load_dotenv
-from langchain_core.documents import Document
 
 from werkzeug.utils import secure_filename
 
@@ -26,38 +25,29 @@ def get_groq_client():
         raise RuntimeError("GROQ_API_KEY environment variable not set")
     return Groq(api_key=api_key)
 
-def chunk_text(text: str,question:str):
-    print(f"==>> text: {text}")
-    """Split text into chunks for processing."""
-    # loader = PDFPlumberLoader(f"/home/rohan/work_place/OpenCV_demo/backend/UPLOAD/{text}")
-    # with open(text, "r") as f:
-    #     contents = f.read()
+def chunk_text(text: str, question: str):
+    print(f"==>> text length: {len(text)}")
     tokenizer = tiktoken.get_encoding("cl100k_base")
     tokens = tokenizer.encode(text)
-    chunk_size = 2000 
+    chunk_size = 2000
     chunk_overlap = 200
     chunks = []
     start = 0
     while start < len(tokens):
-        end = start + chunk_size
+        end = min(start + chunk_size, len(tokens))
         chunk_text = tokenizer.decode(tokens[start:end])
-        chunks.append(Document(page_content=chunk_text))
+        chunks.append(chunk_text)
         start += chunk_size - chunk_overlap
-        db = Chroma.from_documents(chunks)
-    return answer_with_groq(db,question)
+
+    context = "\n\n".join(chunks[:4]) if chunks else text
+    return answer_with_groq(context, question)
  
-def answer_with_groq(db,question, k=4):
+def answer_with_groq(context, question):
     try:
         client = get_groq_client()
     except RuntimeError as e:
         # Propagate a clear error that can be returned to the user
         raise RuntimeError("Groq client unavailable: " + str(e))
-    # 1. Retrieve most relevant chunks
-    docs = db.similarity_search(question, k=k)
-
-    # 2. Build the context text
-    context = "\n\n".join([d.page_content for d in docs])
-    # print("Context:  ",context)
 
     # 3. Build the prompt sent to Groq
     prompt = f"""
@@ -65,6 +55,7 @@ def answer_with_groq(db,question, k=4):
     When a user asks a question, analyze the context carefully and respond in a way that directly addresses their need.
     Your responses should be clear, informative, and tailored to the specific nature of the user's question,
     whether it's general knowledge, technical assistance, academic inquiry, or something else.
+    Format your answer in markdown for better readability, using headings, lists, bold, and italics where appropriate.
     If the Question is Not realted to Context give Casually Answer to User
 
     Context:
