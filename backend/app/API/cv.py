@@ -79,6 +79,7 @@ def detect_live():
             return jsonify({"error": "No image received"}), 400
 
         file = request.files['image']
+        print(f"==>> file: {file}")
         data = file.read()
         if not data:
             return jsonify({"error": "Empty file uploaded"}), 400

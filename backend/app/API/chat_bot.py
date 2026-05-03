@@ -1,9 +1,9 @@
 from flask import Blueprint ,request,jsonify
-from langchain_community.document_loaders import PDFPlumberLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_huggingface import HuggingFaceEmbeddings
+# from langchain_community.document_loaders import PDFPlumberLoader
+# from langchain_text_splitters import RecursiveCharacterTextSplitter
+# from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
-from langchain_openai import OpenAI
+# from langchain_openai import OpenAI
 import os,tiktoken,PyPDF2
 from groq import Groq
 from dotenv import load_dotenv
