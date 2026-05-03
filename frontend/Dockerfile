@@ -7,7 +7,15 @@ RUN apk update && apk upgrade --no-cache
 
 # Install dependencies
 COPY package*.json ./
-RUN npm ci
+
+# Configure npm for better reliability
+RUN npm config set registry https://registry.npmjs.org/ && \
+    npm config set fetch-retry-mintimeout 20000 && \
+    npm config set fetch-retry-maxtimeout 120000 && \
+    npm config set fetch-retries 5
+
+# Install dependencies with retry logic
+RUN npm ci --verbose || (sleep 5 && npm ci --verbose) || (sleep 10 && npm ci --verbose)
 
 # Copy source
 COPY . .

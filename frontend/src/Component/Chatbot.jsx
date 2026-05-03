@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Upload, Send, File, Loader2, MessageSquare, FileText, Trash2 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 // const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL
 export default function AIChatbot() {
     const [messages, setMessages] = useState([]);
@@ -283,7 +284,13 @@ export default function AIChatbot() {
                                                 msg.isError ? styles.errorMessage : styles.assistantMessage)
                                         }}
                                     >
-                                        <div style={styles.messageContent}>{msg.content}</div>
+                                        <div style={styles.messageContent}>
+                                            {msg.role === 'assistant' ? (
+                                                <ReactMarkdown>{msg.content}</ReactMarkdown>
+                                            ) : (
+                                                msg.content
+                                            )}
+                                        </div>
                                         <div style={styles.timestamp}>
                                             {new Date(msg.timestamp).toLocaleTimeString()}
                                         </div>

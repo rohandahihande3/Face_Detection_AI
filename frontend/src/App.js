@@ -12,6 +12,7 @@ import {
   Video,
   X,
 } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 import "./App.css";
 
 const API_BASE = (process.env.REACT_APP_API_BASE_URL || "/api").replace(/\/$/, "");
@@ -486,8 +487,15 @@ function App() {
           <div className="panel chat-panel">
             <div className="messages">
               {messages.map((message, index) => (
-                <div className={`message ${message.role}`} key={`${message.role}-${index}`}>
-                  {message.text}
+                <div
+                  className={`message ${message.role}${message.role === "assistant" ? " markdown-message" : ""}`}
+                  key={`${message.role}-${index}`}
+                >
+                  {message.role === "assistant" ? (
+                    <ReactMarkdown>{message.text}</ReactMarkdown>
+                  ) : (
+                    message.text
+                  )}
                 </div>
               ))}
               {chatBusy && (

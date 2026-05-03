@@ -317,6 +317,45 @@
   white-space: pre-wrap;
 }
 
+.markdown-message {
+  white-space: normal;
+}
+
+.markdown-message > *:first-child {
+  margin-top: 0;
+}
+
+.markdown-message > *:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-message h1,
+.markdown-message h2,
+.markdown-message h3,
+.markdown-message h4 {
+  margin: 14px 0 8px;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.markdown-message p {
+  margin: 0 0 8px;
+}
+
+.markdown-message ul,
+.markdown-message ol {
+  margin: 6px 0 10px;
+  padding-left: 22px;
+}
+
+.markdown-message li {
+  margin: 3px 0;
+}
+
+.markdown-message strong {
+  font-weight: 700;
+}
+
 .message.user {
   align-self: flex-end;
   color: #ffffff;
