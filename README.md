@@ -14,10 +14,10 @@ The app allows users to upload images or use their camera for real-time face det
 
 ## 🚀 Features
 
-### 🖥️ Frontend (React)
-- Clean UI with image upload and webcam support  
-- Live face detection with streamed frames  
-- Fast production build served via Nginx  
+### 🖥️ Frontend (React + Nginx)
+- Compact single-page UI for image upload, camera capture, live detection, and AI chat
+- Camera frames are downscaled before upload to reduce CPU and memory pressure
+- Production Nginx serves static files and proxies `/api/*` to Flask, so one EC2 public port is enough
 
 ### ⚙️ Backend (Flask + OpenCV)
 - REST API for image detection  
@@ -88,6 +88,20 @@ Build & Start
 docker compose up --build
 
 ```
+The frontend is available at:
+```bash
+http://YOUR_EC2_PUBLIC_IP
+```
+
+The backend stays inside the Docker network. Nginx forwards `/api/*` to Flask, so your EC2 security group only needs inbound HTTP on port `80`.
+
+Camera access requires a secure browser origin. Image upload works on `http://YOUR_EC2_PUBLIC_IP`, but webcam mode needs either `http://localhost` during development or `https://your-domain.com` in production.
+
+If you run the React dev server instead of Docker, point it to Flask:
+```bash
+REACT_APP_API_BASE_URL=http://localhost:5000 npm start
+```
+
 ### Start Without Rebuilding
 ```bash
 docker compose up
@@ -96,6 +110,3 @@ docker compose up
 ### Stop Containers
 ```bash
 docker compose down
-
-
-

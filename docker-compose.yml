@@ -1,12 +1,13 @@
-version: "3.9"
-
 services:
   backend:
     build:
       context: ./backend
     container_name: face-detection-backend
-    ports:
-      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    environment:
+      PORT: 5000
+    restart: unless-stopped
     networks:
       - opencv-net
 
@@ -17,7 +18,8 @@ services:
     depends_on:
       - backend
     ports:
-      - "3000:80"
+      - "80:80"
+    restart: unless-stopped
     networks:
       - opencv-net
 
