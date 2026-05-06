@@ -3,6 +3,7 @@ services:
     build:
       context: ./backend
     container_name: face-detection-backend
+    gpus: all
     env_file:
       - ./backend/.env
     environment:
@@ -10,6 +11,7 @@ services:
     restart: unless-stopped
     networks:
       - opencv-net
+    
 
   frontend:
     build:

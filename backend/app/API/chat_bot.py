@@ -9,6 +9,14 @@ from groq import Groq
 from dotenv import load_dotenv
 
 from werkzeug.utils import secure_filename
+from ultralytics import YOLO
+import torch
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
+model = YOLO("yolov8n.pt")
+model.to(device)
+
 
 load_dotenv()
 
@@ -220,3 +228,5 @@ def upload_documents():
 
     except Exception as e:
         return jsonify({"msg": str(e)}), 500
+
+

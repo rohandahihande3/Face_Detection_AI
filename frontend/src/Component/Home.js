@@ -699,7 +699,7 @@ export default function Home() {
                     console.error("Live detection error:", err.message);
                 }
             }, "image/jpeg");
-        }, 400);
+        }, 100);
     };
 
     // ---------------------------

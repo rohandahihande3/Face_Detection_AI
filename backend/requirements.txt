@@ -1,12 +1,25 @@
+# Flask==3.1.3
+# flask_cors==6.0.1
+# groq==1.2.0
+# kafka_python==2.3.0
+# langchain_community==0.4.1
+# langchain_core==1.3.2
+# numpy==2.2.6
+# opencv-python-headless==4.12.0.88
+# PyPDF2==3.0.1
+# python-dotenv==1.2.2
+# tiktoken==0.12.0
+# Werkzeug==3.1.8
+
+
 Flask==3.1.3
 flask_cors==6.0.1
-groq==1.2.0
-kafka_python==2.3.0
-langchain_community==0.4.1
-langchain_core==1.3.2
 numpy==2.2.6
-opencv-python-headless==4.12.0.88
-PyPDF2==3.0.1
+opencv-python-headless==4.10.0.84
+gunicorn==22.0.0
+psutil==5.9.8
 python-dotenv==1.2.2
 tiktoken==0.12.0
+PyPDF2==3.0.1
+groq==1.2.0
 Werkzeug==3.1.8
