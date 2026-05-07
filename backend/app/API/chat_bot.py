@@ -1,13 +1,7 @@
 from flask import Blueprint ,request,jsonify
-# from langchain_community.document_loaders import PDFPlumberLoader
-# from langchain_text_splitters import RecursiveCharacterTextSplitter
-# from langchain_huggingface import HuggingFaceEmbeddings
-# from langchain_community.vectorstores import Chroma
-# from langchain_openai import OpenAI
 import os,tiktoken,PyPDF2
 from groq import Groq
 from dotenv import load_dotenv
-
 from werkzeug.utils import secure_filename
 from ultralytics import YOLO
 import torch
@@ -19,8 +13,6 @@ model.to(device)
 
 
 load_dotenv()
-
-# client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 UPLOAD_FOLDER = "UPLOAD"
 if not os.path.exists(UPLOAD_FOLDER):
@@ -85,74 +77,7 @@ def answer_with_groq(context, question):
     return response.choices[0].message.content
 
 
-# def documents_embeddings(documnt,question):
-#     try:
-#         loader = PDFPlumberLoader(f"UPLOAD/{documnt}")
-
-#         docs = loader.load()
-
-#         spliter = RecursiveCharacterTextSplitter(chunk_size = 500,chunk_overlap = 100)
-#         chunks = spliter.split_documents(docs)
-
-#         embediings = HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2')
-#         vector_list = embediings.embed_documents([c.page_content for c in chunks])
-#         print(vector_list)
-
-#         db = Chroma.from_documents(chunks,embediings)    
-#         return answer_with_groq(db,question)
-#     except Exception as e:
-#         print(f"==>> e: {e}")
-#         return e
-
 chat_bp = Blueprint("chat_bp",__name__)
-
-# def rag_pipeline(question):
-#     try:
-#         client = get_groq_client()
-#     except RuntimeError as e:
-#         # Propagate a clear error that can be returned to the user
-#         raise RuntimeError("Groq client unavailable: " + str(e))
-# #   docs = db.similarity_search(question, k=k)
-
-# #   context = "\n\n".join([d.page_content for d in docs])
-
-#     prompt = f"""
-#         You are a helpful assistant trained to provide accurate and relevant answers based on the context of the user's query.
-#         When a user asks a question, analyze the context carefully and respond in a way that directly addresses their need.
-#         Your responses should be clear, informative, and tailored to the specific nature of the user's question,
-#         whether it's general knowledge, technical assistance, academic inquiry, or something else.
-        
-
-#         Question:
-#         {question}
-
-#         Answer:
-#         """.strip()
-
-#     response = client.chat.completions.create(
-#             model="openai/gpt-oss-120b",
-#             messages=[{"role": "user", "content": prompt}],
-#             temperature=0.1,
-#         )
-
-#     final_answer = response.choices[0].message.content
-#     return final_answer
-
-
-
-# @chat_bp.route('/chat', methods=["POST"])
-# def start_chat():
-#     try:
-#         data = request.get_json()
-#         message = data.get("message")
-#         # attempt to run pipeline
-#         try:
-#             response = rag_pipeline(message)
-#         except RuntimeError as e:
-#             return jsonify({"error": str(e)}), 500
-#         return jsonify({"response": response})
-#     except Exception as e:
-#         return jsonify({"msg": str(e)}), 500
 
 
 @chat_bp.route("/chat", methods=["POST"])
