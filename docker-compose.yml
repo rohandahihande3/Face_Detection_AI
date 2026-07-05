@@ -2,8 +2,7 @@ services:
   backend:
     build:
       context: ./backend
-    container_name: face-detection-backend
-    gpus: all
+    # container_name: face-detection-backend
     env_file:
       - ./backend/.env
     environment:
@@ -11,12 +10,11 @@ services:
     restart: unless-stopped
     networks:
       - opencv-net
-    
 
   frontend:
     build:
       context: ./frontend
-    container_name: face-detection-frontend
+    # container_name: face-detection-frontend
     depends_on:
       - backend
     ports:
